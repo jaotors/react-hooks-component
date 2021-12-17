@@ -3,8 +3,10 @@ import ListNames from './components/ListNames'
 import { getPeople, getPerson } from './apis/people'
 import { PeopleContext } from './context/people'
 
+
 const sampleReducer = (state, action) => {
-  switch (action.type) {
+  const { type, payload } = action
+  switch (type) {
     case 'OPEN_ADD_MODAL':
       return {
         ...state,
@@ -28,21 +30,34 @@ const sampleReducer = (state, action) => {
 function App() {
   const [people, setPeople] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [modalState, modalDispatch] = useReducer(sampleReducer, {
+  const [state, dispatch] = useReducer(sampleReducer, {
+    isAddModalOpen: false,
+    isEditModalOpen: false,
+  })
+
+  
+
+  const [stateOne, setStateOne] = useState({
     isAddModalOpen: false,
     isEditModalOpen: false,
   })
 
   const handleAddModalOpen = () => {
-    modalDispatch({ type: 'OPEN_ADD_MODAL' })
+    
+    dispatch({ type: 'OPEN_ADD_MODAL', payload: {
+      fullName: ''
+    } })
+    
   }
 
   const handleEditModalOpen = () => {
-    modalDispatch({ type: 'OPEN_EDIT_MODAL' })
+    dispatch({ type: 'OPEN_EDIT_MODAL', payload: {
+      fullName: ''
+    } })
   }
 
   const handleCloseModal = () => {
-    modalDispatch({ type: 'CLOSE_ALL_MODAL' })
+    dispatch({ type: 'CLOSE_ALL_MODAL' })
   }
 
   const handleAddMorePeople = async () => {
@@ -80,8 +95,8 @@ function App() {
             </div>
           )}
 
-          {modalState.isAddModalOpen && <p>modal add open</p>}
-          {modalState.isEditModalOpen && <p>modal edit open</p>}
+          {state.isAddModalOpen && <p>modal add open</p>}
+          {state.isEditModalOpen && <p>modal edit open</p>}
         </div>
       </PeopleContext.Provider>
       another one
